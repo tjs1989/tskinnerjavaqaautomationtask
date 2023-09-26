@@ -10,6 +10,9 @@ plugins {
     id 'application'
 }
 
+def testRunnerRegex = '**/APITestRunner*'
+def featuresPath = 'app/src/test/resources/features'
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -18,11 +21,15 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+//    testImplementation 'junit:junit:4.13.1'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:32.1.1-jre'
+
+    implementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -40,4 +47,27 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+task regressionTests(type: Test) {
+    include '**/APITestRunner*'
+}
+
+tasks.withType(Test) {
+    dependsOn cleanTest
+    testLogging {
+        showStandardStreams = true
+    }
+    systemProperties System.properties
+}
+
+task androidLoginTests(type: Test) {
+    include testRunnerRegex
+    systemProperty("cucumber.features", featuresPath)
+    systemProperty("cucumber.filter.tags", "@androidLogin")
+}
+
+task androidSmokeTests(type: Test) {
+    include testRunnerRegex
+    systemProperty("cucumber.filter.tags", "@androidLogin")
 }
