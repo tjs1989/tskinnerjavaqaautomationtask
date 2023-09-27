@@ -16,8 +16,10 @@ public class ListItemStepDefs {
     AddItemCalls addItemCalls = new AddItemCalls();
     ItemUtils itemUtils = new ItemUtils();
     ListItemCalls listItemCalls = new ListItemCalls();
+    AddItemStepDefs addItemStepDefs = new AddItemStepDefs();
 
     private io.restassured.response.Response listItemsResponse;
+    private io.restassured.response.Response listItemResponse;
 
     @Given("^An item has been added to the list$")
     public void objectAddedToList() {
@@ -35,5 +37,15 @@ public class ListItemStepDefs {
     @Then("^The list of all items is returned$")
     public void isListOfAllObjectsReturned() {
         listItemCalls.confirmAllItemsAreReturned(listItemsResponse);
+    }
+
+    @Given("a call to the list item by ID endpoint with the ID of {string}")
+    public void iCallTheListItemByIDEndpointWithTheIDOf(String itemId) {
+        listItemResponse = listItemCalls.getItemById(itemId);
+    }
+
+    @Then("an empty response is seen")
+    public void iSeeAnEmptyResponse() {
+        listItemCalls.confirmEmptyResponseIsReceived(listItemResponse);
     }
 }

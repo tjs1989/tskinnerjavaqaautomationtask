@@ -11,6 +11,9 @@ import tskinnerjavaqaautomationtask.ItemUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import static setup.TestData.DEFAULT_ITEM_DATA_JSON;
+import static setup.TestData.DEFAULT_ITEM_NAME;
+
 public class AddItemStepDefs {
 
     AddItemCalls addItemCalls = new AddItemCalls();
@@ -19,6 +22,8 @@ public class AddItemStepDefs {
     Response addItemResponse;
     Map<String, Object> itemDataJson = new HashMap<>();
     String itemName = "";
+
+    String createdItemId = "";
 
     @Given("a {string} item is created")
     public void aItemIsCreated(String item) {
@@ -58,5 +63,21 @@ public class AddItemStepDefs {
     @And("a {string} is created")
     public void aIsCreated(String expectedItemName) {
         addItemCalls.confirmItemHasBeenAdded(addItemResponse, expectedItemName, itemDataJson);
+    }
+
+    @Given("a {string} item is created with the default specs")
+    public void aItemIsCreatedWithTheDefaultSpecs(String itemName) {
+        itemDataJson = DEFAULT_ITEM_DATA_JSON;
+         addItemResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
+    }
+
+    @Then("the created item ID is returned")
+    public void theCreatedItemIDIsReturned() {
+        createdItemId = addItemCalls.getCreatedItemID(addItemResponse);
+    }
+
+    @And("the item can be retrieved by ID from the list by ID endpoint")
+    public void theItemCanBeRetrievedByIDFromTheListByIDEndpoint() {
+        System.out.println(createdItemId);
     }
 }

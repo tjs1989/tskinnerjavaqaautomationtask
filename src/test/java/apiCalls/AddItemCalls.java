@@ -20,20 +20,22 @@ public class AddItemCalls {
                 .post("");
     }
 
-    public void confirmCorrectStatusCodeIsReceived(Response response, int expectedStatusCode){
+    public void confirmCorrectStatusCodeIsReceived(Response response, int expectedStatusCode) {
         assertThat(response.statusCode(), Matchers.equalTo(expectedStatusCode));
     }
 
+    public String getCreatedItemID(Response addItemResponse) {
+        JsonPath responseJsonPath = addItemResponse.jsonPath();
+        return responseJsonPath.get("id");
+    }
+
     public void confirmItemHasBeenAdded(Response addItemResponse, String itemName, Map<String, Object> addItemJsonRequest) {
-        System.out.println(addItemResponse);
+        JsonPath addItemResponseJsonPath = addItemResponse.jsonPath();
 
-        JsonPath jsonPathEvaluator = addItemResponse.jsonPath();
-
-        String name = jsonPathEvaluator.get("name");
-        String hddSize = jsonPathEvaluator.getString("data.'Hard Disk Size'");
-        System.out.println(hddSize);
-        String cpuModel = jsonPathEvaluator.get("data.'CPU Model'");
-        int year = jsonPathEvaluator.get("data.year");
+        String name = addItemResponseJsonPath.get("name");
+        String hddSize = addItemResponseJsonPath.getString("data.'Hard Disk Size'");
+        String cpuModel = addItemResponseJsonPath.get("data.'CPU Model'");
+        int year = addItemResponseJsonPath.get("data.year");
 
         assertThat(name, Matchers.equalToIgnoringCase(itemName));
         assertThat(hddSize, Matchers.equalToIgnoringCase((String) addItemJsonRequest.get("Hard Disk Size")));
