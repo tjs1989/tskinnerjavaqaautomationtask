@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features/",
         glue = "stepDefinitions",
         plugin = {"pretty",
-                "html:target/cucumberReports/mobile/report.html",
-                "json:target/cucumberReports/mobile/report.json"
+                "html:target/cucumberReports/api/report.html",
+                "json:target/cucumberReports/api/report.json"
         })
 public class APITestRunner {
 }
