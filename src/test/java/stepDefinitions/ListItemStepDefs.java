@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import apiCalls.AddItemCalls;
+import apiCalls.ListItemCalls;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,23 +11,28 @@ import tskinnerjavaqaautomationtask.ItemUtils;
 import static setup.TestData.DEFAULT_ITEM_DATA_JSON;
 import static setup.TestData.DEFAULT_ITEM_NAME;
 
-public class ListObjectStepDefs {
+
+public class ListItemStepDefs {
         AddItemCalls addItemCalls = new AddItemCalls();
         ItemUtils itemUtils = new ItemUtils();
-        @Given("^An object has been added to the list$")
+        ListItemCalls listItemCalls = new ListItemCalls();
+
+    private io.restassured.response.Response listItemsResponse;
+
+    @Given("^An item has been added to the list$")
         public void objectAddedToList(){
                Response addItemResponse = addItemCalls.addItem(itemUtils.buildItemJson(DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON));
                addItemCalls.confirmItemHasBeenAdded(addItemResponse, DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON);
         }
 
-        @When("^A user lists all objects$")
+        @When("^A user lists all items")
         public void userListsAllObjects(){
-                System.out.println("all objects listed");
+               listItemsResponse = listItemCalls.getAllItems();
         }
 
 
-        @Then("^The list of all objects is returned$")
+        @Then("^The list of all items is returned$")
         public void isListOfAllObjectsReturned(){
-                System.out.println("list of all objects returned");
+            listItemCalls.confirmAllItemsAreReturned(listItemsResponse);
         }
 }

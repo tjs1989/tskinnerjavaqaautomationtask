@@ -17,16 +17,12 @@ import static setup.TestData.BASE_URL;
 
 public class AddItemCalls {
     public Response addItem(String requestBody) {
-        Response res = given()
+        return given()
                 .baseUri(BASE_URL)
                 .header("Content-type", "application/json")
                 .body(requestBody)
                 .when()
                 .post("");
-
-        String body = res.getBody().asString();
-        System.out.println(body);
-        return res;
     }
 
     public void confirmItemHasBeenAdded(Response addItemResponse,String itemName, Map<String, Object> addItemJsonRequest){
