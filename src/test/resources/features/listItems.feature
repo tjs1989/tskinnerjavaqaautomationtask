@@ -16,4 +16,4 @@ Feature: Listing Items
   Scenario: Listing an item by an invalid ID
     Given a call to the list item by ID endpoint with the ID of "!@$FDERHHEH"
     Then a 200 response code is returned
-    Then an empty response is seen
+    Then an empty response is seen from the list item by ID endpoint

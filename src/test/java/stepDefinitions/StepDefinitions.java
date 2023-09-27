@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import apiCalls.AddItemCalls;
+import apiCalls.DeleteItemCalls;
 import apiCalls.ListItemCalls;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -19,6 +20,7 @@ public class StepDefinitions {
     AddItemCalls addItemCalls = new AddItemCalls();
     ItemUtils itemUtils = new ItemUtils();
     ListItemCalls listItemCalls = new ListItemCalls();
+    DeleteItemCalls deleteItemCalls = new DeleteItemCalls();
     
     Map<String, Object> itemDataJson = new HashMap<>();
     String itemName = "";
@@ -108,9 +110,23 @@ public class StepDefinitions {
         apiResponse = listItemCalls.getItemById(itemId);
     }
 
-    @Then("an empty response is seen")
+    @Then("an empty response is seen from the list item by ID endpoint")
     public void iSeeAnEmptyResponse() {
         listItemCalls.confirmEmptyResponseIsReceived(apiResponse);
     }
 
+    @When("the created item is deleted")
+    public void theCreatedItemCanBeDeleted() {
+        apiResponse = deleteItemCalls.deleteItem(createdItemId);
+    }
+
+    @And("a successful delete message is received")
+    public void aSuccessfulDeleteMessageIsReceived() {
+        deleteItemCalls.confirmItemHasBeenDeleted(apiResponse, createdItemId);
+    }
+
+    @And("a call to to get the item by predefined Id is made")
+    public void aCallToToGetTheItemByPredefinedIdIsMade() {
+        iCallTheListItemByIDEndpointWithTheIDOf(createdItemId);
+    }
 }
