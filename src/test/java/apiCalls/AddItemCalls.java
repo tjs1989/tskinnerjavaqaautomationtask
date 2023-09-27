@@ -1,18 +1,13 @@
 package apiCalls;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static setup.TestData.BASE_URL;
 
 public class AddItemCalls {
@@ -25,15 +20,21 @@ public class AddItemCalls {
                 .post("");
     }
 
-    public void confirmItemHasBeenAdded(Response addItemResponse,String itemName, Map<String, Object> addItemJsonRequest){
+    public void confirmCorrectStatusCodeIsReceived(Response response, int expectedStatusCode){
+        assertThat(response.statusCode(), Matchers.equalTo(expectedStatusCode));
+    }
+
+    public void confirmItemHasBeenAdded(Response addItemResponse, String itemName, Map<String, Object> addItemJsonRequest) {
+        System.out.println(addItemResponse);
+
         JsonPath jsonPathEvaluator = addItemResponse.jsonPath();
 
         String name = jsonPathEvaluator.get("name");
         String hddSize = jsonPathEvaluator.getString("data.'Hard Disk Size'");
+        System.out.println(hddSize);
         String cpuModel = jsonPathEvaluator.get("data.'CPU Model'");
         int year = jsonPathEvaluator.get("data.year");
 
-        assertThat(addItemResponse.statusCode(), Matchers.equalTo(200));
         assertThat(name, Matchers.equalToIgnoringCase(itemName));
         assertThat(hddSize, Matchers.equalToIgnoringCase((String) addItemJsonRequest.get("Hard Disk Size")));
         assertThat(cpuModel, Matchers.equalToIgnoringCase((String) addItemJsonRequest.get("CPU Model")));
