@@ -10,7 +10,7 @@ import static setup.TestData.BASE_URL;
 
 public class DeleteItemCalls {
 
-    public Response deleteItem(String itemId){
+    public Response deleteItem(String itemId) {
         return given()
                 .baseUri(BASE_URL)
                 .header("Content-type", "application/json")
@@ -19,13 +19,13 @@ public class DeleteItemCalls {
                 .delete("/" + itemId);
     }
 
-    public void confirmItemHasBeenDeleted(Response response, String itemId){
+    public void confirmItemHasBeenDeleted(Response response, String itemId) {
         JsonPath responseJsonPath = response.jsonPath();
         String message = responseJsonPath.get("message");
         assertThat(message, Matchers.equalTo("Object with id = " + itemId + " has been deleted."));
     }
 
-    public void confirmItemIsNotFound(Response response, String itemId){
+    public void confirmItemIsNotFound(Response response, String itemId) {
         JsonPath responseJsonPath = response.jsonPath();
         String message = responseJsonPath.get("error");
         assertThat(message, Matchers.equalTo("Object with id = " + itemId + " doesn't exist."));

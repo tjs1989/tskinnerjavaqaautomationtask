@@ -30,7 +30,7 @@ public class ItemUtils {
         return gson.toJson(itemObjectJson);
     }
 
-    public String getRandomStringId(){
+    public String getRandomStringId() {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString().replaceAll("-", "");
     }

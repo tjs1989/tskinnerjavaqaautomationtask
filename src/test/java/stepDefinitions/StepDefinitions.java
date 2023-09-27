@@ -21,14 +21,13 @@ public class StepDefinitions {
     ItemUtils itemUtils = new ItemUtils();
     ListItemCalls listItemCalls = new ListItemCalls();
     DeleteItemCalls deleteItemCalls = new DeleteItemCalls();
-    
+
     Map<String, Object> itemDataJson = new HashMap<>();
     String itemName = "";
 
     String createdItemId = "";
 
     private io.restassured.response.Response apiResponse;
-
 
 
     @Given("a {string} item is created")
@@ -74,7 +73,7 @@ public class StepDefinitions {
     @Given("a {string} item is created with the default specs")
     public void aItemIsCreatedWithTheDefaultSpecs(String itemName) {
         itemDataJson = DEFAULT_ITEM_DATA_JSON;
-         apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
+        apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
     }
 
     @Then("the created item ID is returned")
@@ -85,7 +84,7 @@ public class StepDefinitions {
     @Then("the item can be retrieved by ID from the list by ID endpoint")
     public void theItemCanBeRetrievedByIDFromTheListByIDEndpoint() {
         iCallTheListItemByIDEndpointWithTheIDOf(createdItemId);
-        listItemCalls.confirmCorrectItemIdInResponse(apiResponse,createdItemId);
+        listItemCalls.confirmCorrectItemIdInResponse(apiResponse, createdItemId);
     }
 
     @Given("^An item has been added to the list$")
