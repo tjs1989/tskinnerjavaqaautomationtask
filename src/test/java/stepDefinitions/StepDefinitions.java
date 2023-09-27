@@ -6,7 +6,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import tskinnerjavaqaautomationtask.ItemUtils;
 
 import java.util.HashMap;
@@ -27,6 +26,8 @@ public class StepDefinitions {
     String createdItemId = "";
 
     private io.restassured.response.Response apiResponse;
+
+
 
     @Given("a {string} item is created")
     public void aItemIsCreated(String item) {
@@ -65,7 +66,7 @@ public class StepDefinitions {
 
     @And("a {string} is created")
     public void aIsCreated(String expectedItemName) {
-        addItemCalls.confirmItemHasBeenAdded(apiResponse, expectedItemName, itemDataJson);
+        addItemCalls.confirmCorrectItemInfoIsReturned(apiResponse, expectedItemName, itemDataJson);
     }
 
     @Given("a {string} item is created with the default specs")
@@ -79,23 +80,23 @@ public class StepDefinitions {
         createdItemId = addItemCalls.getCreatedItemID(apiResponse);
     }
 
-    @And("the item can be retrieved by ID from the list by ID endpoint")
+    @Then("the item can be retrieved by ID from the list by ID endpoint")
     public void theItemCanBeRetrievedByIDFromTheListByIDEndpoint() {
-        System.out.println(createdItemId);
+        iCallTheListItemByIDEndpointWithTheIDOf(createdItemId);
+        listItemCalls.confirmCorrectItemIdInResponse(apiResponse,createdItemId);
     }
 
     @Given("^An item has been added to the list$")
     public void objectAddedToList() {
-        Response apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON));
+        apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON));
         addItemCalls.confirmCorrectStatusCodeIsReceived(apiResponse, 200);
-        addItemCalls.confirmItemHasBeenAdded(apiResponse, DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON);
+        addItemCalls.confirmCorrectItemInfoIsReturned(apiResponse, DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON);
     }
 
     @When("^A user lists all items")
     public void userListsAllObjects() {
         apiResponse = listItemCalls.getAllItems();
     }
-
 
     @Then("^The list of all items is returned$")
     public void isListOfAllObjectsReturned() {

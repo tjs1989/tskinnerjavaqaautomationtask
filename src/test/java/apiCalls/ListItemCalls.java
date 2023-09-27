@@ -1,9 +1,7 @@
 package apiCalls;
 
-import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
 import org.hamcrest.Matchers;
 
 import java.util.List;
@@ -29,20 +27,29 @@ public class ListItemCalls {
                 .get();
     }
 
-    public void confirmEmptyResponseIsReceived(Response response){
+    public void confirmEmptyResponseIsReceived(Response response) {
         assertThat(response.getBody().asString(), Matchers.equalTo("[]"));
     }
 
+    public void confirmCorrectItemIdInResponse(Response response, String expectedId) {
+        JsonPath responseJsonPath = response.jsonPath();
+
+        List<Object> allItems;
+        allItems = responseJsonPath.getList("");
+
+        assertThat(allItems.size(), Matchers.equalTo(1));
+
+        String itemString = allItems.get(0).toString();
+        assertThat(itemString, Matchers.containsString("id=" + expectedId));
+    }
 
 
-    public void confirmAllItemsAreReturned(Response listItemsResponse){
+    public void confirmAllItemsAreReturned(Response listItemsResponse) {
         JsonPath listItemsJsonPath = listItemsResponse.jsonPath();
 
         List<String> allItems;
         allItems = listItemsJsonPath.getList("");
 
-        assertThat(listItemsResponse.statusCode(), Matchers.equalTo(200));
         assertThat(allItems.size(), Matchers.greaterThan(1));
-
     }
 }

@@ -29,13 +29,13 @@ public class AddItemCalls {
         return responseJsonPath.get("id");
     }
 
-    public void confirmItemHasBeenAdded(Response addItemResponse, String itemName, Map<String, Object> addItemJsonRequest) {
-        JsonPath addItemResponseJsonPath = addItemResponse.jsonPath();
+    public void confirmCorrectItemInfoIsReturned(Response response, String itemName, Map<String, Object> addItemJsonRequest) {
+        JsonPath responseJsonPath = response.jsonPath();
 
-        String name = addItemResponseJsonPath.get("name");
-        String hddSize = addItemResponseJsonPath.getString("data.'Hard Disk Size'");
-        String cpuModel = addItemResponseJsonPath.get("data.'CPU Model'");
-        int year = addItemResponseJsonPath.get("data.year");
+        String name = responseJsonPath.get("name");
+        String hddSize = responseJsonPath.getString("data.'Hard Disk Size'");
+        String cpuModel = responseJsonPath.get("data.'CPU Model'");
+        int year = responseJsonPath.get("data.year");
 
         assertThat(name, Matchers.equalToIgnoringCase(itemName));
         assertThat(hddSize, Matchers.equalToIgnoringCase((String) addItemJsonRequest.get("Hard Disk Size")));

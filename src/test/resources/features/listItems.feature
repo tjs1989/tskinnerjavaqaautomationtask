@@ -13,7 +13,7 @@ Feature: Listing Items
     Then the created item ID is returned
     And the item can be retrieved by ID from the list by ID endpoint
 
-  Scenario: Listing an Item by an invalid ID
+  Scenario: Listing an item by an invalid ID
     Given a call to the list item by ID endpoint with the ID of "!@$FDERHHEH"
     Then a 200 response code is returned
     Then an empty response is seen

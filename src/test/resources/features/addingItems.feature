@@ -1,7 +1,7 @@
 Feature: Adding Items
   Ensuring that a user can add items using the relevant endpoint
 
-  Scenario: Creating an Item
+  Scenario: Creating an item
     Given a "Alienware Aurora R15" item is created
     And the CPU model is "Intel iCore i7"
     And the item has a price of 1999.99
