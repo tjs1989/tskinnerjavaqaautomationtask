@@ -1,8 +1,5 @@
 package setup;
 
-import io.cucumber.java.it.Ma;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class TestData {
