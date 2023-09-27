@@ -1,22 +1,23 @@
 package stepDefinitions;
 
-import apiCalls.APICalls;
+import apiCalls.AddItemCalls;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import tskinnerjavaqaautomationtask.ObjectUtils;
+import io.restassured.response.Response;
+import tskinnerjavaqaautomationtask.ItemUtils;
+
+import static setup.TestData.DEFAULT_ITEM_DATA_JSON;
+import static setup.TestData.DEFAULT_ITEM_NAME;
 
 public class ListObjectStepDefs {
-        APICalls apiCalls = new APICalls();
+        AddItemCalls addItemCalls = new AddItemCalls();
+        ItemUtils itemUtils = new ItemUtils();
         @Given("^An object has been added to the list$")
         public void objectAddedToList(){
-                apiCalls.addObject();
+               Response addItemResponse = addItemCalls.addItem(itemUtils.buildItemJson(DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON));
+               addItemCalls.confirmItemHasBeenAdded(addItemResponse, DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON);
         }
-
-        private void addDefaultItemToList() {
-                System.out.println("hi");
-        }
-
 
         @When("^A user lists all objects$")
         public void userListsAllObjects(){
