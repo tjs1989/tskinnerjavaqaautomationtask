@@ -1,3 +1,4 @@
+@addingItems
 Feature: Adding Items
   Ensuring that a user can add items using the relevant endpoint
 

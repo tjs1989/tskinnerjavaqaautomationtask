@@ -19,19 +19,16 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
     implementation 'com.google.guava:guava:32.1.1-jre'
-
     implementation 'io.cucumber:cucumber-java:7.14.0'
-    testImplementation 'io.rest-assured:rest-assured:5.3.2'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'io.rest-assured:rest-assured:5.3.2'
     testImplementation 'io.cucumber:cucumber-junit:7.14.0'
     testImplementation 'org.hamcrest:hamcrest:2.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -51,10 +48,6 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task regressionTests(type: Test) {
-    include '**/APITestRunner*'
-}
-
 tasks.withType(Test) {
     dependsOn cleanTest
     testLogging {
@@ -69,13 +62,24 @@ sourceSets {
     }
 }
 
-task androidLoginTests(type: Test) {
-    include testRunnerRegex
-    systemProperty("cucumber.features", featuresPath)
-    systemProperty("cucumber.filter.tags", "@androidLogin")
+task allTests(type: Test) {
+    include '**/APITestRunner*'
 }
 
-task androidSmokeTests(type: Test) {
+task addingItemTests(type: Test) {
     include testRunnerRegex
-    systemProperty("cucumber.filter.tags", "@androidLogin")
+    systemProperty("cucumber.features", featuresPath)
+    systemProperty("cucumber.filter.tags", "@addingItems")
+}
+
+task deletingItemTests(type: Test) {
+    include testRunnerRegex
+    systemProperty("cucumber.features", featuresPath)
+    systemProperty("cucumber.filter.tags", "@deletingItems")
+}
+
+task listItemTests(type: Test) {
+    include testRunnerRegex
+    systemProperty("cucumber.features", featuresPath)
+    systemProperty("cucumber.filter.tags", "@listItems")
 }

@@ -1,3 +1,4 @@
+@deletingItems
 Feature: Deleting items
   Confirming that an item can be successfully deleted
 

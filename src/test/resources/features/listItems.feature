@@ -1,3 +1,4 @@
+@listItems
 Feature: Listing Items
   Ensuring that a user can list items using the relevant endpoints
 
