@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import apiCalls.AddItemCalls;
+import apiCalls.ListItemCalls;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,16 +15,18 @@ import java.util.Map;
 import static setup.TestData.DEFAULT_ITEM_DATA_JSON;
 import static setup.TestData.DEFAULT_ITEM_NAME;
 
-public class AddItemStepDefs {
+public class StepDefinitions {
 
     AddItemCalls addItemCalls = new AddItemCalls();
     ItemUtils itemUtils = new ItemUtils();
-
-    Response addItemResponse;
+    ListItemCalls listItemCalls = new ListItemCalls();
+    
     Map<String, Object> itemDataJson = new HashMap<>();
     String itemName = "";
 
     String createdItemId = "";
+
+    private io.restassured.response.Response apiResponse;
 
     @Given("a {string} item is created")
     public void aItemIsCreated(String item) {
@@ -52,32 +55,60 @@ public class AddItemStepDefs {
 
     @When("the request to add the item is made")
     public void theRequestToAddTheItemIsMade() {
-        addItemResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
+        apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
     }
 
     @Then("a {int} response code is returned")
     public void aResponseCodeIsReturned(int expectedStatusCode) {
-        addItemCalls.confirmCorrectStatusCodeIsReceived(addItemResponse, expectedStatusCode);
+        addItemCalls.confirmCorrectStatusCodeIsReceived(apiResponse, expectedStatusCode);
     }
 
     @And("a {string} is created")
     public void aIsCreated(String expectedItemName) {
-        addItemCalls.confirmItemHasBeenAdded(addItemResponse, expectedItemName, itemDataJson);
+        addItemCalls.confirmItemHasBeenAdded(apiResponse, expectedItemName, itemDataJson);
     }
 
     @Given("a {string} item is created with the default specs")
     public void aItemIsCreatedWithTheDefaultSpecs(String itemName) {
         itemDataJson = DEFAULT_ITEM_DATA_JSON;
-         addItemResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
+         apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(itemName, itemDataJson));
     }
 
     @Then("the created item ID is returned")
     public void theCreatedItemIDIsReturned() {
-        createdItemId = addItemCalls.getCreatedItemID(addItemResponse);
+        createdItemId = addItemCalls.getCreatedItemID(apiResponse);
     }
 
     @And("the item can be retrieved by ID from the list by ID endpoint")
     public void theItemCanBeRetrievedByIDFromTheListByIDEndpoint() {
         System.out.println(createdItemId);
+    }
+
+    @Given("^An item has been added to the list$")
+    public void objectAddedToList() {
+        Response apiResponse = addItemCalls.addItem(itemUtils.buildItemJson(DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON));
+        addItemCalls.confirmCorrectStatusCodeIsReceived(apiResponse, 200);
+        addItemCalls.confirmItemHasBeenAdded(apiResponse, DEFAULT_ITEM_NAME, DEFAULT_ITEM_DATA_JSON);
+    }
+
+    @When("^A user lists all items")
+    public void userListsAllObjects() {
+        apiResponse = listItemCalls.getAllItems();
+    }
+
+
+    @Then("^The list of all items is returned$")
+    public void isListOfAllObjectsReturned() {
+        listItemCalls.confirmAllItemsAreReturned(apiResponse);
+    }
+
+    @Given("a call to the list item by ID endpoint with the ID of {string}")
+    public void iCallTheListItemByIDEndpointWithTheIDOf(String itemId) {
+        apiResponse = listItemCalls.getItemById(itemId);
+    }
+
+    @Then("an empty response is seen")
+    public void iSeeAnEmptyResponse() {
+        listItemCalls.confirmEmptyResponseIsReceived(apiResponse);
     }
 }

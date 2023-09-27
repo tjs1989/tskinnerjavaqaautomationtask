@@ -24,12 +24,13 @@ public class ListItemCalls {
     public Response getItemById(String itemId) {
         return given().baseUri(BASE_URL)
                 .header("Content-type", "application/json")
+                .param("id", itemId)
                 .when()
-                .get("?id=" + itemId);
+                .get();
     }
 
     public void confirmEmptyResponseIsReceived(Response response){
-        assertThat(response.getBody().toString(), Matchers.equalTo("[]"));
+        assertThat(response.getBody().asString(), Matchers.equalTo("[]"));
     }
 
 
