@@ -3,11 +3,18 @@ package stepDefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import tskinnerjavaqaautomationtask.AddObjectCalls;
 
 public class ListObjectStepDefs {
+        AddObjectCalls addObjectCalls = new AddObjectCalls();
         @Given("^An object has been added to the list$")
         public void objectAddedToList(){
-                System.out.println("add object to list");
+//                addObjectCalls.hello();
+                addObjectCalls.jsonObject();
+        }
+
+        private void addDefaultItemToList() {
+                System.out.println("hi");
         }
 
 
