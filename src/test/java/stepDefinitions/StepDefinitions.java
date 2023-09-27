@@ -129,4 +129,14 @@ public class StepDefinitions {
     public void aCallToToGetTheItemByPredefinedIdIsMade() {
         iCallTheListItemByIDEndpointWithTheIDOf(createdItemId);
     }
+
+    @Given("I have a randomly generated item id")
+    public void iHaveARandomlyGeneratedItemId() {
+        createdItemId = itemUtils.getRandomStringId();
+    }
+
+    @Then("a message saying that the item does not exist is received")
+    public void aMessageSayingThatTheItemDoesNotExistIsReceived() {
+        deleteItemCalls.confirmItemIsNotFound(apiResponse, createdItemId);
+    }
 }

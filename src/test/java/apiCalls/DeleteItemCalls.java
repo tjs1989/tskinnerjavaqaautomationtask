@@ -24,4 +24,10 @@ public class DeleteItemCalls {
         String message = responseJsonPath.get("message");
         assertThat(message, Matchers.equalTo("Object with id = " + itemId + " has been deleted."));
     }
+
+    public void confirmItemIsNotFound(Response response, String itemId){
+        JsonPath responseJsonPath = response.jsonPath();
+        String message = responseJsonPath.get("error");
+        assertThat(message, Matchers.equalTo("Object with id = " + itemId + " doesn't exist."));
+    }
 }

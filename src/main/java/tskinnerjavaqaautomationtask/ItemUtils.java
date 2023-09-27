@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class ItemUtils {
@@ -27,5 +28,10 @@ public class ItemUtils {
         Gson gson = new Gson();
 
         return gson.toJson(itemObjectJson);
+    }
+
+    public String getRandomStringId(){
+        UUID randomUUID = UUID.randomUUID();
+        return randomUUID.toString().replaceAll("-", "");
     }
 }
